@@ -84,3 +84,7 @@ Caso queira entrar em contato conosco, segue nossos LinkedIn:
 - **[Luana]()**
 - **[Rebeca]()** 
 - **[Milla]()**
+
+### Apresentações
+[Gamma.App](https://gamma.app/docs/WireFrame-n1who25k5voe6bl)
+
