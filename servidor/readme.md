@@ -45,32 +45,46 @@ classDiagram
         +atualizarModeloIA(erro: boolean)
         +armazenarDados(dadosPacote: object)
         +consultarPedidos(query: object)
-        +gerarRelatorio(tipo: string)
         +gerenciarSeguranca(autenticacao: object)
         +interfaces(credencial: object)
+        +gerarEmbedding(heuristicas: string)
+        +transmitirEmbedding()
     }
 
     class Coletor {
-        +autetificar(credencial: object)
+        +autenticar(credencial: object)
         +lerCodigoBarras(codigo: string)
         +baixarDadosPacote(codigo: string)
         +enviarFeedbackServidor(correto: boolean, dadosCorretos: object)
     }
 
     class Dashboard {
-        +autentificar(credencial: object)
+        +autenticar(credencial: object)
         +buscarPedido(consulta: string)
         +filtrarPedidos(filtro: object)
-        +consultarChatIA(pergunta: string)
+        +baixarEmbeddings(APIservidor)
+        +consultarChatIA(heuristicas: string, embedding: object)
+        +gerarRelatorioAutomatico()
     }
 
     Servidor --> Coletor : Retorna Dados do Pacote
     Servidor --> Dashboard : Disponibiliza Informações
     Coletor --> Servidor : Envia Feedback de Correção
     Dashboard --> Servidor : Consulta e Filtra Pedidos
-    Dashboard --> Servidor : Envia Perguntas ao Chat IA
-```
+    Dashboard --> Servidor : Baixa Embeddings do Servidor
+    Servidor --> Dashboard : Transmite Embeddings
+    Dashboard --> ChatIA : Usa Embeddings Localmente
 
+```
+#### Por que rodar o LLM localmente?
+✅ Rodar a LLM localmente no notebook reduz carga no servidor.
+✅ Transpilação vetorial é mais leve, pois apenas gera representações compactadas dos dados e não requer inferência pesada no servidor.
+✅ Notebook pode operar offline, usando os embeddings baixados para consultas rápidas.
+**Traduzindo**
+✅ Menos carga no servidor → Apenas processa embeddings e os transmite.
+✅ Dashboard pode funcionar offline → LLM usa os embeddings locais.
+✅ Baixa latência → Usuário acessa informações rapidamente sem depender de rede.
+✅ Treinamento dinâmico → O servidor ajusta embeddings ao longo do tempo, permitindo aprendizado incremental.
 ### Metodo de Treinamento
 ```mermaid
 graph TD;
@@ -90,11 +104,22 @@ graph TD;
     %% Atualização da Inferência
     BancoErros -->|Treino Contínuo| Inferencia
 
-    %% Conversão para Embeddings e Criação da LLM
+    %% Conversão para Embeddings e Transferência para Dashboard
     Registro -->|Transformação em Texto| ProcessadorEmbeddings[Conversão para Embeddings]
-    ProcessadorEmbeddings -->|Criação do Estado Atual| MotorLLM[LLM Gerada com Inferência Atual]
-    MotorLLM -->|Disponibilizado no Dashboard| ChatIA[Chat LLM Integrado]
+    ProcessadorEmbeddings -->|Geração do Arquivo Vetorial| EmbeddingArquivo[Arquivo de Embeddings]
+    EmbeddingArquivo -->|Baixado pelo Dashboard| DashboardNotebook[Dashboard no Notebook]
+
+    %% Processamento Local no Notebook
+    DashboardNotebook -->|Carrega Embeddings Localmente| MotorLLM[LLM Local no Notebook]
+    MotorLLM -->|Disponibiliza IA para Usuário| ChatIA[Chat LLM Integrado no Dashboard]
+    MotorLLM -->|Gera Relatórios Automáticos| Relatorio[Relatório Inteligente]
+
 ```
+#### Por que não rodar a IA no lado servidor?
+✅ Maior desempenho: O servidor apenas processa embeddings, sem rodar inferência direta na LLM.
+✅ Redução de Latência: Dashboard carrega os embeddings uma única vez, sem necessidade de acessar o servidor continuamente.
+✅ Modo Offline: A LLM roda mesmo sem conexão com o servidor.
+✅ Relatórios Inteligentes: A IA pode resumir e gerar relatórios baseados nos dados recebidos.
 ---
 
 ## 🎯 Benefícios da Automação no Servidor
