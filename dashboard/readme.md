@@ -1,5 +1,5 @@
 
-# 📊 Módulo Dashboard – Sistema de Gestão Logística
+# [📊 Módulo Dashboard – Sistema de Gestão Logística](https://wireframe.cc/pro/pp/5ac75052e862047)
 
 ## 🚀 Visão Geral
 O **Módulo Dashboard** é a interface administrativa do sistema, utilizada para **monitorar, classificar e gerenciar pedidos além de fornecer um chat para uma LLM que carrega os dados treinados através de embenddings** em tempo real.  
