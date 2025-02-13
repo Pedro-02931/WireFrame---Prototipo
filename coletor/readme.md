@@ -40,6 +40,7 @@ classDiagram
     }
 
     class Servidor {
+        +atualizarDocumentosNoBD(dadosPacote: object)
         +validarDadosPacote(codigo: string)
         +processarFeedback(erro: boolean, dadosCorrigidos: object)
         +atualizarModeloIA(erro: boolean)
@@ -49,6 +50,7 @@ classDiagram
     Servidor --> Coletor : Retorna Dados
     Coletor --> Servidor : Envia Feedback de Correção
     Servidor --> Servidor : Atualiza Modelo IA
+    Servidor --> Servidor : Atualiza Banco de Dados Interno
 ```
 
 ### 📌 **Explicação dos Métodos**
@@ -64,6 +66,7 @@ classDiagram
 - `validarDadosPacote(codigo)`: Verifica se o código de barras já existe no banco.
 - `processarFeedback(erro, dadosCorrigidos)`: Caso tenha erro, ajusta as informações e atualiza os registros.
 - `atualizarModeloIA(erro)`: Se um erro for identificado, a IA **ajusta seu aprendizado para evitar falhas futuras**.
+- `atualizarDocumentosNoBD(dadosPacote: object)`: Atualiza documento para representação no DashBoard.
 
 ---
 
