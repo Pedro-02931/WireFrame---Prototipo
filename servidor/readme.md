@@ -122,6 +122,86 @@ graph TD;
 ✅ Relatórios Inteligentes: A IA pode resumir e gerar relatórios baseados nos dados recebidos.
 ---
 
+Função matemática em diagrama:
+```
+graph TD;
+
+    %% Entrada dos Dados
+    Input["📥 Entrada: Heurísticas (Palavras)"] -->|Convertido em Vetores| Embeddings["🧠 Representação Vetorial"]
+    
+    %% Inferência Inicial
+    Embeddings -->|Multiplicação por Pesos| Inferencia["⚙️ Cálculo da Inferência: S(t) = Σ w_i f(x_i)"]
+    
+    %% Feedback e Ajuste
+    Inferencia -->|Comparação com o Valor Real| Erro["❌ Cálculo do Erro: e = S(t) - y_real"]
+    Erro -->|Atualização de Pesos| AjustePesos["🔄 Ajuste dos Pesos: w_i = w_i - η * e * f(x)"]
+    
+    %% Loop de Aprendizado
+    AjustePesos -->|Recalcula Inferência| Inferencia
+    Inferencia -->|Melhora a Precisão ao Longo do Tempo| Resultado["✅ Inferência Otimizada"]
+```
+
+Já comecei, pq não?
+
+```C
+#include <stdio.h>
+#include <math.h>
+
+#define N 10  // Número de heurísticas (neurônios simbólicos)
+#define EPOCHS 50  // Número de iterações
+#define ETA 0.1  // Taxa de aprendizado
+
+// Função de ativação tangente hiperbólica
+double activation(double x) {
+    return tanh(x);
+}
+
+int main() {
+    double weights[N]; // Pesos das conexões entre heurísticas
+    double heuristics[N]; // Representação vetorial das heurísticas
+    double S_t; // Estado da inferência
+    double y_real; // Valor correto esperado
+    double error;
+
+    // Inicializando pesos e heurísticas
+    for (int i = 0; i < N; i++) {
+        weights[i] = (double) rand() / RAND_MAX; // Pesos aleatórios entre 0 e 1
+        heuristics[i] = ((double)i / N) * 2 - 1; // Valores entre -1 e 1
+    }
+
+    // Treinamento
+    for (int epoch = 0; epoch < EPOCHS; epoch++) {
+        S_t = 0;
+        
+        // Calcula a inferência
+        for (int i = 0; i < N; i++) {
+            S_t += weights[i] * activation(heuristics[i]);
+        }
+
+        // Define um valor correto simulado (média das ativações)
+        y_real = 0;
+        for (int i = 0; i < N; i++) {
+            y_real += activation(heuristics[i]);
+        }
+        y_real /= N;
+
+        // Calcula erro
+        error = S_t - y_real;
+
+        // Ajuste dos pesos
+        for (int i = 0; i < N; i++) {
+            weights[i] -= ETA * error * activation(heuristics[i]);
+        }
+
+        // Print da inferência para visualização do aprendizado
+        printf("Iteração %d: S_t = %.6f, Erro = %.6f\n", epoch, S_t, error);
+    }
+
+    printf("Treinamento finalizado.\n");
+    return 0;
+}
+```
+
 ## 🎯 Benefícios da Automação no Servidor
 ✅ **Inferência inteligente** – O servidor **aprende com os erros** e ajusta o destino automaticamente.  
 ✅ **Redução de carga no banco** – Implementação de **ciclo de vida dos pacotes** para escalabilidade.  
