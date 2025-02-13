@@ -123,7 +123,7 @@ graph TD;
 ---
 
 Função matemática em diagrama:
-```
+```mermaid
 graph TD;
 
     %% Entrada dos Dados
